@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     environment: Literal["local", "staging", "production"] = "local"
+    database_url: str | None = None
 
 
 @lru_cache
