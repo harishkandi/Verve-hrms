@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage'
 import { AppPageNotBuilt, NotFoundPage } from './pages/NotFoundPage'
 import { SpacePage } from './pages/SpacePage'
 import { UiKitPage } from './pages/UiKitPage'
+import { ProfileStylesPage } from './dashboard/ProfileStyles'
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'apps', element: <AppsPage /> },
       { path: 'ui', element: <UiKitPage /> },
+      { path: 'profile-styles', element: <ProfileStylesPage /> },
       { path: 'team', element: <SpacePage space="Team" /> },
       { path: 'organization', element: <SpacePage space="Organization" /> },
       ...apps.map((app) => ({

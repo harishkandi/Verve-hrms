@@ -24,6 +24,7 @@ const colorByAccent: Record<Accent, string> = {
   amber: '#f4b860',
   blue: '#7c9cff',
   rose: '#ff7a90',
+  teal: '#3fc4c4',
 }
 
 export function railColor(id: string, accent?: Accent): string {

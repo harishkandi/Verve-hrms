@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/lib/cn'
-import type { Accent } from './accent'
+import { type Accent, accents } from './accent'
 
 const sizes = {
   xs: { box: 'size-6 rounded', icon: 'size-3.5' },
@@ -10,11 +10,12 @@ const sizes = {
 }
 
 /**
- * App icon tile. Every app uses the same Verve blue tint so the portal reads as
- * one product; the app's own accent is kept for future use but not shown here.
+ * App icon tile. With an accent it is a colored gradient with a white glyph and a
+ * soft glow; without one it falls back to the neutral Verve blue tint.
  */
 export function AppIcon({
   icon: Icon,
+  accent,
   size = 'md',
   className,
 }: {
@@ -23,10 +24,15 @@ export function AppIcon({
   size?: keyof typeof sizes
   className?: string
 }) {
+  const colored = accent ? accents[accent] : null
+  const glow = colored && (size === 'md' || size === 'lg') ? colored.glow : null
   return (
     <span
       className={cn(
-        'inline-grid shrink-0 place-items-center bg-primary-soft text-primary ring-1 ring-primary/10 ring-inset',
+        'inline-grid shrink-0 place-items-center',
+        colored
+          ? cn(colored.tile, glow, 'text-white ring-1 ring-white/20 ring-inset')
+          : 'bg-primary-soft text-primary ring-1 ring-primary/10 ring-inset',
         sizes[size].box,
         className,
       )}

@@ -48,20 +48,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <WorkSchedule />
-
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            <LeaveBalanceCard />
-            <HolidaysCard />
-            <TasksCard className="md:col-span-2 xl:col-span-1" />
-          </div>
-
-          <div className="grid gap-5 xl:grid-cols-2">
-            <CelebrationsCard />
-            <AnnouncementsCard />
-          </div>
-
-          <section className="pt-1">
+          <section>
             <SectionHeader
               title="Your apps"
               description="Pinned apps appear first in the side bar."
@@ -76,6 +63,19 @@ export function HomePage() {
             />
             <AppTiles />
           </section>
+
+          <WorkSchedule />
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <LeaveBalanceCard />
+            <HolidaysCard />
+            <TasksCard className="md:col-span-2 xl:col-span-1" />
+          </div>
+
+          <div className="grid gap-5 xl:grid-cols-2">
+            <CelebrationsCard />
+            <AnnouncementsCard />
+          </div>
         </div>
       </div>
     </Page>

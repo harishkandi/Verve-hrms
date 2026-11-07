@@ -10,7 +10,7 @@ const manifest: AppManifest = {
   description:
     'Collect new-joiner details and documents, run onboarding checklists, handle HR approvals and department allocation, and track progress.',
   icon: UserPlus,
-  accent: 'sky',
+  accent: 'teal',
   category: 'People',
   permission: 'onboarding.open',
   nav: [
