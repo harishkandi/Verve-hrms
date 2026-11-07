@@ -1,0 +1,421 @@
+@import 'tailwindcss';
+
+/* Dark mode follows the `.dark` class on <html> (set by ThemeProvider). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens. Use these utilities (bg-bg, bg-surface, bg-surface-2, text-fg,
+ * text-muted, text-subtle, border-border, bg-primary, text-primary, bg-ok-soft, …)
+ * instead of raw colors so light and dark themes both work automatically.
+ *
+ * Palette comes from the Verve Advisory logo: blue #234788 and charcoal #2b2a29.
+ * Look: classic and quiet. Navy structure, white surfaces, hairline borders,
+ * one brass accent used sparingly (active side bar item, profile cover rule).
+ */
+@theme {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Page titles, greeting and names only. */
+  --font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+  --font-brand: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  /* Verve Advisory blue (logo) and the side bar navy. */
+  --color-brand: #234788;
+  --color-brand-deep: #1c3a70;
+  --color-navy: #0d1b36;
+  --color-brass: #a8844f;
+
+  --color-bg: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f8fb;
+  --color-fg: #1c2230;
+  --color-muted: #566074;
+  --color-subtle: #8a93a5;
+  --color-border: #e1e6ee;
+  --color-border-soft: #edf0f5;
+
+  --color-primary: #234788;
+  --color-primary-hover: #1c3a70;
+  --color-primary-fg: #ffffff;
+  --color-primary-soft: #edf1f9;
+
+  /* Status. Only where something means present, pending, holiday or a problem. */
+  --color-ok: #1e8a5a;
+  --color-ok-soft: #e7f5ee;
+  --color-warn: #b06a0a;
+  --color-warn-soft: #fdf3e2;
+  --color-bad: #c63a30;
+  --color-bad-soft: #fcecea;
+  --color-teal: #0f7680;
+  --color-teal-soft: #e4f3f4;
+
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.04);
+  --shadow-lift: 0 1px 2px rgb(16 24 40 / 0.05), 0 8px 20px -8px rgb(16 24 40 / 0.14);
+  --shadow-pop: 0 14px 36px -10px rgb(13 27 54 / 0.24);
+  --shadow-navy: 0 1px 2px rgb(13 27 54 / 0.2);
+
+  /* Side panel entrance. Only used under motion-safe. */
+  --animate-panel-in: panel-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade-in: fade-in 180ms ease-out;
+
+  @keyframes panel-in {
+    from {
+      transform: translateX(32px);
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+}
+
+@layer base {
+  .dark {
+    --color-brand: #3d63b0;
+    --color-brand-deep: #1c3a70;
+    --color-navy: #090f1d;
+    --color-brass: #c4a16a;
+
+    --color-bg: #0e1320;
+    --color-surface: #151b2a;
+    --color-surface-2: #1a2132;
+    --color-fg: #e8ecf4;
+    --color-muted: #a3acbf;
+    --color-subtle: #6f7a90;
+    --color-border: #262e42;
+    --color-border-soft: #1f2738;
+
+    --color-primary: #9db4e6;
+    --color-primary-hover: #b6c8ee;
+    --color-primary-fg: #0d1b36;
+    --color-primary-soft: #17223d;
+
+    --color-ok: #4cc38a;
+    --color-ok-soft: #10291e;
+    --color-warn: #e6a23c;
+    --color-warn-soft: #2e2110;
+    --color-bad: #f06b60;
+    --color-bad-soft: #341614;
+    --color-teal: #4cc4cf;
+    --color-teal-soft: #0f2a2e;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-lift: 0 10px 28px -10px rgb(0 0 0 / 0.6);
+    --shadow-pop: 0 20px 48px -12px rgb(0 0 0 / 0.7);
+    --shadow-navy: 0 0 0 1px #1a2236;
+
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+/* Small-caps style label used above sections and on the profile card. */
+@utility eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+/* Hide scrollbars on horizontal scrollers (tab rows on narrow screens). */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- Side bar rail ---------- */
+/* Each item sets --rail-c to its app colour. The rail is navy in both themes. */
+@layer components {
+  .rail-item {
+    position: relative;
+    display: flex;
+    width: 76px;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border-radius: var(--radius-lg);
+    padding: 9px 2px 7px;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 500;
+    color: rgb(255 255 255 / 0.72);
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      box-shadow 0.2s;
+  }
+  .rail-item:hover {
+    color: #fff;
+  }
+  .rail-item:focus-visible {
+    outline: 2px solid var(--rail-c);
+    outline-offset: 1px;
+  }
+  .rail-item.is-active {
+    color: #fff;
+    font-weight: 600;
+  }
+  .rail-item.is-active::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -6px;
+    height: 24px;
+    width: 3px;
+    transform: translateY(-50%);
+    border-radius: 0 3px 3px 0;
+    background: var(--rail-c);
+    box-shadow: 0 0 10px var(--rail-c);
+  }
+  .rail-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    color: var(--rail-c);
+    opacity: 0.88;
+    overflow: visible;
+    transition:
+      opacity 0.2s,
+      filter 0.3s;
+  }
+  .rail-item:hover .rail-icon {
+    opacity: 1;
+  }
+  .rail-item.is-active .rail-icon {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rail-c) 85%, transparent));
+  }
+  .rail-label {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rail-badge {
+    position: absolute;
+    top: -5px;
+    right: -9px;
+    display: grid;
+    min-width: 16px;
+    height: 16px;
+    place-items: center;
+    border-radius: 8px;
+    padding: 0 4px;
+    background: #d9483c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 0 0 2px var(--color-navy);
+  }
+  /* A soft flash of the app's colour behind the icon on click. */
+  .rail-shine {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--rail-c) 55%, transparent), transparent 68%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Pivot points, in the icon's 24×24 grid. */
+  .rl-min,
+  .rl-hour {
+    transform-origin: 12px 12px;
+  }
+  .rl-heart {
+    transform-origin: 12px 13px;
+  }
+  .rl-plus {
+    transform-origin: 19px 11px;
+  }
+  .rl-note-front {
+    transform-origin: 13.5px 10px;
+  }
+  .rl-note-back {
+    transform-origin: 10px 14px;
+  }
+  .rl-sq {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rail-shine {
+    animation: rail-shine 700ms ease-out;
+  }
+  .rail-play.rl-home,
+  .rail-play.rl-hop {
+    animation: rl-hop 600ms ease-out;
+  }
+  .rail-play .rl-check {
+    stroke-dasharray: 1;
+    animation: rl-draw 500ms 120ms ease-out both;
+  }
+  .rail-play .rl-min {
+    animation: rl-turn 1100ms cubic-bezier(0.45, 0, 0.2, 1);
+    --rl-turns: 720deg;
+  }
+  .rail-play .rl-hour {
+    animation: rl-turn 1100ms cubic-bezier(0.45, 0, 0.2, 1);
+    --rl-turns: 360deg;
+  }
+  .rail-play .rl-note-front {
+    animation: rl-note-front 800ms ease-in-out;
+  }
+  .rail-play .rl-note-back {
+    animation: rl-note-back 800ms ease-in-out;
+  }
+  .rail-play .rl-line {
+    stroke-dasharray: 1;
+    animation: rl-draw 550ms ease-out both;
+  }
+  .rail-play .rl-head {
+    animation: rl-head 350ms 380ms ease-out both;
+  }
+  .rail-play .rl-heart {
+    animation: rl-beat 1000ms ease-in-out;
+  }
+  .rail-play .rl-plus {
+    animation: rl-plus 650ms cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+  .rail-play .rl-arrow {
+    animation: rl-out 700ms ease-in-out;
+  }
+  .rail-play .rl-sq {
+    animation: rl-pop 450ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+  }
+  .rail-play .rl-sq:nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .rail-play .rl-sq:nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .rail-play .rl-sq:nth-child(4) {
+    animation-delay: 180ms;
+  }
+}
+
+@keyframes rail-shine {
+  from {
+    opacity: 1;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+@keyframes rl-hop {
+  35% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-1px);
+  }
+}
+@keyframes rl-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes rl-turn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(var(--rl-turns));
+  }
+}
+@keyframes rl-note-front {
+  40% {
+    transform: translate(2px, -3px) rotate(-9deg);
+  }
+  70% {
+    transform: translate(-0.5px, 0.5px) rotate(2deg);
+  }
+}
+@keyframes rl-note-back {
+  40% {
+    transform: translate(-1.5px, 1.5px) rotate(5deg);
+  }
+}
+@keyframes rl-head {
+  from {
+    opacity: 0;
+    transform: translate(-4px, 4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes rl-beat {
+  14% {
+    transform: scale(1.28);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.18);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+@keyframes rl-plus {
+  from {
+    transform: rotate(-180deg) scale(0.3);
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+  }
+}
+@keyframes rl-out {
+  45% {
+    transform: translateX(5px);
+    opacity: 0;
+  }
+  46% {
+    transform: translateX(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes rl-pop {
+  from {
+    transform: scale(0.4);
+  }
+  to {
+    transform: scale(1);
+  }
+}

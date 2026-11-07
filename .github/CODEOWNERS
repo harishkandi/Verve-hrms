@@ -1,0 +1,20 @@
+# Who must review changes to each folder. Later lines win over earlier ones.
+# Docs: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default: the repository maintainer reviews everything (portal core, shared code, config).
+*                               @adminsoftware-alt
+
+# App owners — replace <github-username> with each developer's GitHub username
+# and remove the leading "#" once the developer is added as a collaborator.
+# /web/src/apps/onboarding/     @<github-username>
+# /api/app/apps/onboarding/     @<github-username>
+# /web/src/apps/pms/            @<github-username>
+# /api/app/apps/pms/            @<github-username>
+# /web/src/apps/vervefit/       @<github-username>
+# /api/app/apps/vervefit/       @<github-username>
+# /web/src/apps/reimbursement/  @<github-username>
+# /api/app/apps/reimbursement/  @<github-username>
+# /web/src/apps/attendance/     @<github-username>
+# /api/app/apps/attendance/     @<github-username>
+# /web/src/apps/exit/           @<github-username>
+# /api/app/apps/exit/           @<github-username>
